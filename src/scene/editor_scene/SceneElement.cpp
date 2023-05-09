@@ -123,10 +123,29 @@ void EditorScene::LitMaterialComponent::add_material_imgui_edit_section(MasterRe
     // Set this to true if the user has changed any of the material values, otherwise the changes won't be propagated
     bool material_changed = false;
     ImGui::Text("Material");
+    material_changed |= ImGui::DragFloat("Visual Scale", &material.texture_scale, 0.01f);
+
+    
+    material_changed |= ImGui::ColorEdit3("Diffuse Tint", &material.diffuse_tint[0]);
+    ImGui::Spacing();
+    material_changed |= ImGui::DragFloat("Diffuse Factor", &material.diffuse_tint[3], 0.01f, 0.0f, FLT_MAX);
+
+
+    material_changed |= ImGui::ColorEdit3("Specular Tint", &material.specular_tint[0]);
+    ImGui::Spacing();
+    material_changed |= ImGui::DragFloat("Specular Factor", &material.specular_tint[3], 0.01f, 0.0f, FLT_MAX);
+
+    material_changed |= ImGui::ColorEdit3("Ambient Tint", &material.ambient_tint[0]);
+    ImGui::Spacing();
+    material_changed |= ImGui::DragFloat("Ambient Factor", &material.ambient_tint[3], 0.01f, 0.0f, FLT_MAX);
+
+    material_changed |= ImGui::DragFloat("Shininess", &material.shininess, 1.0f, 0.0f, 138);
+
 
     // Add UI controls here
 
     ImGui::Spacing();
+
     if (material_changed) {
         update_instance_data();
     }
@@ -138,6 +157,7 @@ void EditorScene::LitMaterialComponent::update_material_from_json(const json& js
     material.specular_tint = m["specular_tint"];
     material.ambient_tint = m["ambient_tint"];
     material.shininess = m["shininess"];
+    material.texture_scale = m["texture_scale"];
 }
 
 json EditorScene::LitMaterialComponent::material_into_json() const {
@@ -146,6 +166,7 @@ json EditorScene::LitMaterialComponent::material_into_json() const {
         {"specular_tint", material.specular_tint},
         {"ambient_tint", material.ambient_tint},
         {"shininess", material.shininess},
+        {"texture_scale", material.texture_scale}
     }};
 }
 
